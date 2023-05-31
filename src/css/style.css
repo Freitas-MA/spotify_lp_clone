@@ -2,6 +2,10 @@ html, body, #home {
     height: 100vh;
     overflow-x: hidden;
 }
+a {
+    color: white;
+    text-decoration: none;
+}
 body {
     background: url(../image/capa.png), 
                 url(../image/ruido.png), 
@@ -10,15 +14,19 @@ body {
     font-family: helvetica, Arial, sans-serif;            
 }
 nav.navbar-transparent {
-    padding: 15px 0px;
+    padding: 0.4rem 0px;
     background: rgba(0, 0, 0, 0.6);
+    transition: 0.4s;
 }
-.navbar-light .navbar-nav .nav-link {
-    color: white;
+
+nav.scrolled {
+    padding: 0.2rem 0px;
+    background: black;
+    transition: 0.4s;
 }
-.navbar-light .navbar-nav .nav-link:hover {
-    text-transform: uppercase;
-    color: white;
+.nav-item {
+    margin: 0 10px;
+    color: rgb(200, 197, 197) !important;
 }
 .navbar-light .navbar-toggler { 
     color: rgba(255, 255, 255, .5);
