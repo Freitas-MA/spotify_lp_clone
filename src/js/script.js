@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const body = document.body;
   const navbar = document.querySelector('#navbar');
   const rotate = document.querySelector('#rotate-img');
-  const albums = document.querySelectorAll('.album');
+  const album = document.querySelectorAll('.img-album');
 
   // Traking scroll position
   function getVisibleScrollPercentage() {
@@ -36,31 +36,43 @@ document.addEventListener('DOMContentLoaded', () => {
       navbar.classList.add('navbar-transparent');
     }
 
-    // Add or remove classes on the albums depending on scroll position
-    albums.forEach(album => {
+    // Add or remove classes on the album depending on scroll position
+    album.forEach((album, index) => {
       if (isElementVisible(album)) {
+        console.log(`Album ${index + 1} is visible`);
         album.classList.add('album-animation');
         album.classList.remove('album-noAnimation');
-      } else {
-        album.classList.remove('album-animation');
-        album.classList.add('album-noAnimation');
-      }
+      } 
     });
-
+    function isElementVisible(element) {
+      const rect = element.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const visiblePercentage = getVisibleScrollPercentage();
+      const elementHeight = rect.bottom - rect.top;
+      const visibleHeight = windowHeight * (visiblePercentage / 100);
+      if (window.innerWidth < 768) {
+        return rect.top <= windowHeight && rect.bottom >= 0;
+      } else {
+        return visibleHeight >= elementHeight;
+      }
+    }
     // Add or remove classes on the rotate element depending on scroll position
     if (isElementVisible(rotate)) {
       console.log('Rotate is visible');
       if (!rotate.classList.contains('rotate-and-fade')) {
+        console.log('Rotate does not have rotate-and-fade class');
         rotate.classList.remove('reverse-rotate-and-fade');
         rotate.classList.add('rotate-and-fade');
       }
-    } else {
-      if (!rotate.classList.contains('reverse-rotate-and-fade')) {
-        rotate.classList.remove('rotate-and-fade');
-        rotate.classList.add('reverse-rotate-and-fade');
-      }
-    }
+    } 
   });
+
+  // Check if the first album is visible on page load and add the animation classes to it
+  if (isElementVisible(album[0])) {
+    console.log('Album 1 is visible');
+    album[0].classList.add('album-animation');
+    album[0].classList.remove('album-noAnimation');
+  }
 });
 
 // Log the window width and device type on resize events
@@ -68,7 +80,9 @@ function logWindowWidth() {
   const width = window.innerWidth;
   console.log(`Window width: ${width}px`);
   const device = {
-    mobile: width < 768,
+    xxs: width < 360,
+    xs: width >= 360 && width < 576,
+    mobile: width >= 576 && width < 768,
     tablet: width >= 768 && width < 992,
     desktop: width >= 992
   }
