@@ -1,7 +1,9 @@
 // Check if DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  const body = document.body;
+  const body = window.document.body;
   const navbar = document.querySelector('#navbar');
+  const services = document.querySelector('#services');
+  const resources = document.querySelector('#resources');
   const rotate = document.querySelector('#rotate-img');
   const album = document.querySelectorAll('.img-album');
 
@@ -13,15 +15,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Verifying if element is visible
+  
   function isElementVisible(element) {
     const rect = element.getBoundingClientRect();
     const windowHeight = window.innerHeight;
     const visiblePercentage = getVisibleScrollPercentage();
     const elementHeight = rect.bottom - rect.top;
     const visibleHeight = windowHeight * (visiblePercentage / 100);
-    return visibleHeight >= elementHeight;
+    const buffer = 100; // add a buffer of 100px to the element's visibility check
+    if (window.innerHeight < 900) {
+      return rect.top <= windowHeight - buffer && rect.bottom >= 0;
+    } else {
+      return rect.bottom >= 0 && rect.bottom <= windowHeight + elementHeight / 2 - buffer;
+    }
   }
-
   // Listen for scroll events on the body
   body.addEventListener('scroll', () => {
     const scrollPercentage = getVisibleScrollPercentage();
@@ -38,26 +45,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Add or remove classes on the album depending on scroll position
     album.forEach((album, index) => {
-      if (isElementVisible(album)) {
+      if (isElementVisible(services)) {
         console.log(`Album ${index + 1} is visible`);
-        album.classList.add('album-animation');
-        album.classList.remove('album-noAnimation');
+        if (!album.classList.contains('album-animation')) {
+          album.classList.add('album-animation');
+          album.classList.remove('album-noAnimation');
+        }
       } 
     });
-    function isElementVisible(element) {
-      const rect = element.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      const visiblePercentage = getVisibleScrollPercentage();
-      const elementHeight = rect.bottom - rect.top;
-      const visibleHeight = windowHeight * (visiblePercentage / 100);
-      if (window.innerWidth < 768) {
-        return rect.top <= windowHeight && rect.bottom >= 0;
-      } else {
-        return visibleHeight >= elementHeight;
-      }
-    }
     // Add or remove classes on the rotate element depending on scroll position
-    if (isElementVisible(rotate)) {
+    if (isElementVisible(resources)) {
       console.log('Rotate is visible');
       if (!rotate.classList.contains('rotate-and-fade')) {
         console.log('Rotate does not have rotate-and-fade class');
@@ -68,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Check if the first album is visible on page load and add the animation classes to it
-  if (isElementVisible(album[0])) {
+  if (window.innerWidth < 768 && isElementVisible(album[0])) {
     console.log('Album 1 is visible');
     album[0].classList.add('album-animation');
     album[0].classList.remove('album-noAnimation');
