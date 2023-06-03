@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Add or remove classes on the album depending on scroll position
     album.forEach((album, index) => {
-      if (isElementVisible(services)) {
+      if (isElementVisible(album)) {
         console.log(`Album ${index + 1} is visible`);
         if (!album.classList.contains('album-animation')) {
           album.classList.add('album-animation');
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } 
     });
     // Add or remove classes on the rotate element depending on scroll position
-    if (isElementVisible(resources)) {
+    if (isElementVisible(rotate)) {
       console.log('Rotate is visible');
       if (!rotate.classList.contains('rotate-and-fade')) {
         console.log('Rotate does not have rotate-and-fade class');
